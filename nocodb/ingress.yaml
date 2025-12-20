@@ -5,7 +5,12 @@ metadata:
   namespace: nocodb
   annotations:
     kubernetes.io/ingress.class: traefik
+    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
+  tls:
+    - hosts:
+        - nocodb.noschoixpourvous.com
+      secretName: nocodb-tls
   rules:
     - host: nocodb.noschoixpourvous.com
       http:
@@ -17,3 +22,4 @@ spec:
                 name: nocodb
                 port:
                   number: 80
+
