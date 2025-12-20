@@ -1,5 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
+resources:
+  requests:
+    cpu: "4"
+    memory: "16Gi"
+  limits:
+    cpu: "8"
+    memory: "32Gi"
+
 metadata:
   name: ollama
 spec:
