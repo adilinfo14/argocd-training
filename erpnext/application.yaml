@@ -9,25 +9,32 @@ spec:
   source:
     repoURL: https://helm.erpnext.com
     chart: erpnext
-    targetRevision: 8.0.5
+    targetRevision: 5.0.6
     helm:
+      releaseName: erpnext
       values: |
-        nodeSelector:
-          role: worker
-
-        persistence:
-          enabled: true
-          worker:
-            storageClass: longhorn
-            size: 50Gi
+        site:
+          host: erpnext.noschoixpourvous.com
+          adminPassword: Wassim2011&@
 
         mariadb:
           enabled: true
+          auth:
+            rootPassword: auto
+            database: erpnext
+            username: erpnext
+            password: auto
           primary:
             persistence:
               enabled: true
               storageClass: longhorn
-              size: 50Gi
+              size: 20Gi
+
+        persistence:
+          worker:
+            enabled: true
+            storageClass: longhorn
+            size: 20Gi
 
         ingress:
           enabled: true
@@ -37,6 +44,9 @@ spec:
               paths:
                 - path: /
                   pathType: Prefix
+          tls:
+            - hosts:
+                - erpnext.noschoixpourvous.com
 
   destination:
     server: https://kubernetes.default.svc
@@ -48,3 +58,4 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+
