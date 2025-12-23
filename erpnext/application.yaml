@@ -34,7 +34,7 @@ spec:
         persistence:
           enabled: true
           worker:
-            storageClass: local-path
+            storageClass: longhorn
             size: 50Gi
 
         # DB/Redis internes (ok pour démarrer ; en vraie prod on externalise)
@@ -43,7 +43,7 @@ spec:
           primary:
             persistence:
               enabled: true
-              storageClass: local-path
+              storageClass: longhorn
               size: 50Gi
           auth:
             rootPassword: "CHANGE_ME"
