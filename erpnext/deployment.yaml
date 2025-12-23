@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: erpnext
-          image: frappe/erpnext:latest
+          image: ton-dockerhub/erpnext-autobootstrap:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
