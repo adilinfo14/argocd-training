@@ -35,6 +35,14 @@ spec:
           image:
             tag: "7.2"
 
+        jobs:
+          createSite:
+            enabled: true
+            siteName: erpnext.noschoixpourvous.com
+            adminPassword: "Wassim2011"
+            installApps:
+              - erpnext     
+
         ingress:
           enabled: true
           className: traefik
@@ -43,6 +51,9 @@ spec:
               paths:
                 - path: /
                   pathType: Prefix
+
+       
+
 
   destination:
     server: https://kubernetes.default.svc
