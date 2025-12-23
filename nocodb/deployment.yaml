@@ -13,6 +13,8 @@ spec:
       labels:
         app: nocodb
     spec:
+      nodeSelector:
+        role: worker
       containers:
         - name: nocodb
           image: nocodb/nocodb:latest
