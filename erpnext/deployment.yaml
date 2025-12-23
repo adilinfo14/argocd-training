@@ -13,6 +13,28 @@ spec:
       labels:
         app: erpnext
     spec:
+
+      initContainers:
+        - name: wait-for-mariadb
+          image: mariadb:10.6
+          command:
+            - sh
+            - -c
+            - |
+              echo "⏳ Waiting for MariaDB..."
+              until mysqladmin ping \
+                -h"$DB_HOST" \
+                -P"$DB_PORT" \
+                -u"$DB_USER" \
+                -p"$DB_PASSWORD" \
+                --silent; do
+                sleep 3
+              done
+              echo "✅ MariaDB is ready"
+          envFrom:
+            - secretRef:
+                name: erpnext-secrets
+
       containers:
         - name: erpnext
           image: ton-dockerhub/erpnext-autobootstrap:latest
@@ -25,6 +47,7 @@ spec:
           volumeMounts:
             - name: sites
               mountPath: /home/frappe/frappe-bench/sites
+
       volumes:
         - name: sites
           persistentVolumeClaim:
