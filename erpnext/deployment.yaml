@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: erpnext
+  namespace: erpnext
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: erpnext
+  template:
+    metadata:
+      labels:
+        app: erpnext
+    spec:
+      containers:
+        - name: erpnext
+          image: frappe/erpnext:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - secretRef:
+                name: erpnext-secrets
+          volumeMounts:
+            - name: sites
+              mountPath: /home/frappe/frappe-bench/sites
+      volumes:
+        - name: sites
+          persistentVolumeClaim:
+            claimName: erpnext-sites
