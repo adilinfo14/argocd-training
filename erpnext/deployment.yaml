@@ -44,6 +44,25 @@ spec:
           envFrom:
             - secretRef:
                 name: erpnext-secrets
+
+          livenessProbe:
+            httpGet:
+              path: /api/method/ping
+              port: 8000
+            initialDelaySeconds: 120
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 3
+
+          readinessProbe:
+            httpGet:
+              path: /api/method/ping
+              port: 8000
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+
           volumeMounts:
             - name: sites
               mountPath: /home/frappe/frappe-bench/sites
