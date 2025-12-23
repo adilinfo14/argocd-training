@@ -1,0 +1,56 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: erpnext
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+    repoURL: https://helm.erpnext.com
+    chart: erpnext
+    targetRevision: 8.0.5
+    helm:
+      values: |
+        nodeSelector:
+          role: worker
+
+        persistence:
+          enabled: true
+          worker:
+            storageClass: longhorn
+            size: 50Gi
+
+        mariadb:
+          enabled: true
+          image:
+            tag: "10.11"
+          primary:
+            persistence:
+              enabled: true
+              storageClass: longhorn
+              size: 50Gi
+
+        redis:
+          image:
+            tag: "7.2"
+
+        ingress:
+          enabled: true
+          className: traefik
+          hosts:
+            - host: erpnext.noschoixpourvous.com
+              paths:
+                - path: /
+                  pathType: Prefix
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: erpnext
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
