@@ -20,10 +20,10 @@ spec:
         mariadb:
           enabled: true
           auth:
-            rootPassword: auto
+            rootPassword: Wassim2011&@
             database: erpnext
             username: erpnext
-            password: auto
+            password: Wassim2011&@
           primary:
             persistence:
               enabled: true
@@ -58,4 +58,3 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
-
