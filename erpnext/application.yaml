@@ -1,0 +1,66 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: erpnext
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+    repoURL: https://helm.erpnext.com
+    chart: erpnext
+    targetRevision: 8.0.5   # tu pourras upgrader plus tard
+    helm:
+      values: |
+        # Force tout sur le worker
+        nodeSelector:
+          role: worker
+
+        # Ingress (Traefik)
+        ingress:
+          enabled: true
+          className: traefik
+          hosts:
+            - host: erpnext.noschoixpourvous.com
+              paths:
+                - path: /
+                  pathType: Prefix
+          tls:
+            - secretName: erpnext-tls
+              hosts:
+                - erpnext.noschoixpourvous.com
+
+        # Storage (à adapter à ton StorageClass)
+        persistence:
+          enabled: true
+          worker:
+            storageClass: local-path
+            size: 50Gi
+
+        # DB/Redis internes (ok pour démarrer ; en vraie prod on externalise)
+        mariadb:
+          enabled: true
+          primary:
+            persistence:
+              enabled: true
+              storageClass: local-path
+              size: 50Gi
+          auth:
+            rootPassword: "CHANGE_ME"
+            password: "CHANGE_ME"
+            username: "erpnext"
+            database: "erpnext"
+
+        redis:
+          enabled: true
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: erpnext
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
