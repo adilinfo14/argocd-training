@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vaultwarden
+  namespace: vaultwarden
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: vaultwarden
+  template:
+    metadata:
+      labels:
+        app: vaultwarden
+    spec:
+      containers:
+      - name: vaultwarden
+        image: vaultwarden/server:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: DOMAIN
+          value: "https://vaultwarden.noschoixpourvous.com"
+        - name: SIGNUPS_ALLOWED
+          value: "true" # a repasser a "false" une fois ton compte cree (voir doc)
+        - name: ADMIN_TOKEN
+          value: "ByHJaZnlngWpjrMdp7Cq1da9IKIdepr8Se1qBeEWQNs0D+cCSWGUra+XQPnuHsAb"
+        volumeMounts:
+        - name: data
+          mountPath: /data
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: vaultwarden-data
