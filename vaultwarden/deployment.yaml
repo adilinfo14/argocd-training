@@ -24,7 +24,7 @@ spec:
         - name: DOMAIN
           value: "https://vaultwarden.noschoixpourvous.com"
         - name: SIGNUPS_ALLOWED
-          value: "true" # a repasser a "false" une fois ton compte cree (voir doc)
+          value: "false"
         - name: ADMIN_TOKEN
           value: "ByHJaZnlngWpjrMdp7Cq1da9IKIdepr8Se1qBeEWQNs0D+cCSWGUra+XQPnuHsAb"
         volumeMounts:
